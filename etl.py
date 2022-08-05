@@ -48,6 +48,8 @@ reg1 = ecoRegions.filter(ee.Filter.eq("LEVEL3", "20.5.3")).geometry()
 
 featureList = ecoRegions.toList(ecoRegions.size())
 
+featureList = ecoRegions.toList(ecoRegions.size())
+featColList = ee.List([])
 taskList = []
 for i in range(featureList.size().getInfo()):
     activeFeat = ee.Feature(featureList.get(i))
@@ -55,7 +57,12 @@ for i in range(featureList.size().getInfo()):
         activeImg = testRes[j]
         randSample = activeImg.sample(numPixels= 2000, tileScale=4, dropNulls=True, region=activeFeat.geometry(), projection=ee.Image("UMD/hansen/global_forest_change_2021_v1_9").projection())
         #featColList = featColList.add(randSample)
-        task = ee.batch.Export.table.toDrive(randSample, f"ExportTask{i}-{j}", activeFeat.get("LEVEL3").getInfo().replace(".", "/"), str(j), "csv")
+        if len(taskList) >= 998:
+          taskList = wait_for_tasks(taskList)
+          j -= 1
+          continue
+        
+        task = ee.batch.Export.table.toDrive(randSample, f"ExportTask{i}-{j}", "GWR_S1_Deforest_NRT\\"+activeFeat.get("LEVEL3").getInfo().replace(".", "\\"), str(j), "csv")
         task.start()
 
 
