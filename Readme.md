@@ -1,2 +1,1 @@
-##Readme
-
+This repo implements the method described in Ballere et al (2021) and extends it by adding local parameter estimation for deforestation detection using Geographically Weighted Regression. The Results are presented in a jupyter notebook which contains an interactive version of the code used. 
