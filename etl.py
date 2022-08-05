@@ -1,4 +1,5 @@
 import utils
+
 import ee
 ee.Initiialize()
 
@@ -63,8 +64,5 @@ for i in range(featureList.size().getInfo()):
           continue
         ecoRegionString = activeFeat.get("LEVEL3").getInfo()
         task = ee.batch.Export.table.toDrive(randSample, f"ExportTask{i}-{j}", "GWR_S1_Deforest_NRT\\"+ecoRegionString.replace(".", "\\"), f"{ecoRegionString}-{j}", "csv")
+        taskList.append(task)
         task.start()
-
-
-    
-    
