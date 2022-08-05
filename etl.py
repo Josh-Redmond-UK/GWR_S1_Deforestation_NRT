@@ -58,11 +58,11 @@ for i in range(featureList.size().getInfo()):
         randSample = activeImg.sample(numPixels= 2000, tileScale=4, dropNulls=True, region=activeFeat.geometry(), projection=ee.Image("UMD/hansen/global_forest_change_2021_v1_9").projection())
         #featColList = featColList.add(randSample)
         if len(taskList) >= 998:
-          taskList = wait_for_tasks(taskList)
+          taskList = utils.wait_for_tasks(taskList)
           j -= 1
           continue
-        
-        task = ee.batch.Export.table.toDrive(randSample, f"ExportTask{i}-{j}", "GWR_S1_Deforest_NRT\\"+activeFeat.get("LEVEL3").getInfo().replace(".", "\\"), str(j), "csv")
+        ecoRegionString = activeFeat.get("LEVEL3").getInfo()
+        task = ee.batch.Export.table.toDrive(randSample, f"ExportTask{i}-{j}", "GWR_S1_Deforest_NRT\\"+ecoRegionString.replace(".", "\\"), f"{ecoRegionString}-{j}", "csv")
         task.start()
 
 
