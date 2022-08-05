@@ -55,12 +55,7 @@ for i in range(featureList.size().getInfo()):
         activeImg = testRes[j]
         randSample = activeImg.sample(numPixels= 2000, tileScale=4, dropNulls=True, region=activeFeat.geometry(), projection=ee.Image("UMD/hansen/global_forest_change_2021_v1_9").projection())
         #featColList = featColList.add(randSample)
-        task = ee.batch.Export.table.toDrive(randSample, f"ExportTask{i}-{j}", activeFeat.get("LEVEL3").getInfo(), j, "csv")
-        if len(task_list) > 999:
-            task_list = utils.wait_for_tasks(task_list)
-            j = j -1
-            continue
-
+        task = ee.batch.Export.table.toDrive(randSample, f"ExportTask{i}-{j}", activeFeat.get("LEVEL3").getInfo().replace(".", "/"), str(j), "csv")
         task.start()
 
 
